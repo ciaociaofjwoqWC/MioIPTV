@@ -1,0 +1,934 @@
+{
+ "channels": [
+  {
+   "name": "Rai 1",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rai1.png",
+   "group": "Rai",
+   "id": "Rai1.it",
+   "number": 1,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=2606803&output=7&forceUserAgent=raiplayappletv",
+    "https://d3k8wzt41aflvx.cloudfront.net/RAI1/Live.m3u8",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=2606803&output=7&forceUserAgent=rainet/4.0.5",
+    "https://dash2.antik.sk/live/test_rai_uno_tizen/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Rai 2",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rai2.png",
+   "group": "Rai",
+   "id": "Rai2.it",
+   "number": 2,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=308718&output=7&forceUserAgent=raiplayappletv",
+    "https://d3k8wzt41aflvx.cloudfront.net/RAI2/Live.m3u8",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=308718&output=7&forceUserAgent=rainet/4.0.5"
+   ]
+  },
+  {
+   "name": "Rai 3",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rai3.png",
+   "group": "Rai",
+   "id": "Rai3.it",
+   "number": 3,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=308709&output=7&forceUserAgent=raiplayappletv",
+    "https://d3k8wzt41aflvx.cloudfront.net/RAI3/Live.m3u8",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=308709&output=7&forceUserAgent=rainet/4.0.5",
+    "https://dash2.antik.sk/live/test_rai_tre_tizen/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Rete 4",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rete4.png",
+   "group": "Mediaset",
+   "id": "Rete4.it",
+   "number": 4,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-r4/r4-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-r4/r4-clr.isml/index.m3u8"
+   ]
+  },
+  {
+   "name": "Canale 5",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/canale5.png",
+   "group": "Mediaset",
+   "id": "Canale5.it",
+   "number": 5,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-c5/c5-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-c5/c5-clr.isml/index.m3u8",
+    "https://live3-mediaset-it.akamaized.net/Content/hls_h0_clr_vos/live/channel(C5)/index.m3u8"
+   ]
+  },
+  {
+   "name": "Italia 1",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/italia1.png",
+   "group": "Mediaset",
+   "id": "Italia1.it",
+   "number": 6,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-i1/i1-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-i1/i1-clr.isml/index.m3u8",
+    "https://live3-mediaset-it.akamaized.net/Content/hls_h0_clr_vos/live/channel(i1)/index.m3u8"
+   ]
+  },
+  {
+   "name": "LA7",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/la7.png",
+   "group": "Altro",
+   "id": "La7.it",
+   "number": 7,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://d3749synfikwkv.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-74ylxpgd78bpb/Live.m3u8",
+    "https://d1chghleocc9sm.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-evfku205gqrtf/Live.m3u8"
+   ]
+  },
+  {
+   "name": "TV8",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/tv8.png",
+   "group": "Sky",
+   "id": "Tv8.it",
+   "number": 8,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://hlslive-web-gcdn-skycdn-it.akamaized.net/TACT/11223/tv8web/master.m3u8?hdnea=st=1701861650~exp=1765449000~acl=/*~hmac=84c9f3f71e57b13c3a67afa8b29a8591ea9ed84bf786524399545d94be1ec04d",
+    "https://hlslive-web-gcdn-skycdn-it.akamaized.net/TACT/11223/tv8web/master.m3u8?hdnts=st=1764666351~exp=1829466206~acl=/*~hmac=b0e9165b6c55027903ad103c8219f363d8765eb300c0d9a339e9767fc3509556"
+   ]
+  },
+  {
+   "name": "NOVE",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/nove.png",
+   "group": "Discovery",
+   "id": "Nove.it",
+   "number": 9,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c1-samsung-it-1831.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-nove-samsungit/playlist.m3u8",
+    "https://streaming.aurora.enhanced.live/live/mpc/enl0eG1mLmVncmVzcy5mZDJ2eHI=/out/v1/IT_SIMULCAST/NOVE/CMAF/index.m3u8"
+   ]
+  },
+  {
+   "name": "20 Mediaset",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/20mediaset.png",
+   "group": "Mediaset",
+   "id": "20Mediaset.it",
+   "number": 20,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-lb/lb-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-lb/lb-clr.isml/index.m3u8"
+   ]
+  },
+  {
+   "name": "Rai 4",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rai4.png",
+   "group": "Rai",
+   "id": "Rai4.it",
+   "number": 21,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746966&output=7&forceUserAgent=raiplayappletv",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746966&output=7&forceUserAgent=rainet/4.0.5",
+    "https://mediapolisevent.rai.it/relinker/relinkerServlet.htm?cont=746966"
+   ]
+  },
+  {
+   "name": "Iris",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/iris.png",
+   "group": "Mediaset",
+   "id": "Iris.it",
+   "number": 22,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-ki/ki-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-ki/ki-clr.isml/index.m3u8",
+    "https://live3-mediaset-it.akamaized.net/Content/hls_h0_clr_vos/live/channel(ki)/index.m3u8"
+   ]
+  },
+  {
+   "name": "Rai 5",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rai5.png",
+   "group": "Rai",
+   "id": "Rai5.it",
+   "number": 23,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=395276&output=7&forceUserAgent=raiplayappletv",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=395276&output=7&forceUserAgent=rainet/4.0.5"
+   ]
+  },
+  {
+   "name": "Rai Movie",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/raimovie.png",
+   "group": "Rai",
+   "id": "RaiMovie.it",
+   "number": 24,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747002&output=7&forceUserAgent=raiplayappletv",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747002&output=7&forceUserAgent=rainet/4.0.5"
+   ]
+  },
+  {
+   "name": "Rai Premium",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/raipremium.png",
+   "group": "Rai",
+   "id": "RaiPremium.it",
+   "number": 25,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746992&output=7&forceUserAgent=raiplayappletv",
+    "https://d3k8wzt41aflvx.cloudfront.net/RaiPremium/Live.m3u8",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746992&output=7&forceUserAgent=rainet/4.0.5"
+   ]
+  },
+  {
+   "name": "Cielo",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/cielo.png",
+   "group": "Sky",
+   "id": "CieloTv.it",
+   "number": 26,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://hlslive-web-gcdn-skycdn-it.akamaized.net/TACT/11219/cieloweb/master.m3u8?hdnea=st=1701861650~exp=1765449000~acl=/*~hmac=84c9f3f71e57b13c3a67afa8b29a8591ea9ed84bf786524399545d94be1ec04d",
+    "https://hlslive-web-gcdn-skycdn-it.akamaized.net/TACT/11219/cieloweb/master.m3u8?hdnts=st=1764666351~exp=1829466206~acl=/*~hmac=b0e9165b6c55027903ad103c8219f363d8765eb300c0d9a339e9767fc3509556"
+   ]
+  },
+  {
+   "name": "Twenty Seven",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/twentyseven.png",
+   "group": "Mediaset",
+   "id": "TwentySeven.it",
+   "number": 27,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-ts/ts-clr.isml/manifest.mpd"
+   ]
+  },
+  {
+   "name": "TV2000",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/tv2000.png",
+   "group": "Altro",
+   "id": "TV2000.it",
+   "number": 28,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://hls-live-tv2000.akamaized.net/hls/live/2028510/tv2000/master.m3u8"
+   ]
+  },
+  {
+   "name": "LA7d",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/la7d.png",
+   "group": "Altro",
+   "id": "LA7D.it",
+   "number": 29,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://d15umi5iaezxgx.cloudfront.net/LA7D/CLN/HLS/Live.m3u8",
+    "https://d15umi5iaezxgx.cloudfront.net/LA7D/CLN/HLS-B/Live.m3u8"
+   ]
+  },
+  {
+   "name": "La 5",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/la5.png",
+   "group": "Mediaset",
+   "id": "LA5.it",
+   "number": 30,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-ka/ka-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-ka/ka-clr.isml/index.m3u8",
+    "https://live3-mediaset-it.akamaized.net/Content/hls_h0_clr_vos/live/channel(ka)/index.m3u8"
+   ]
+  },
+  {
+   "name": "Real Time",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/realtime.png",
+   "group": "Discovery",
+   "id": "RealTime.it",
+   "number": 31,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c2-samsung-it-1835.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-realtime-samsungit/playlist.m3u8",
+    "https://streaming.aurora.enhanced.live/live/mpc/enl0eG1mLmVncmVzcy5mZDJ2eHI=/out/v1/IT_SIMULCAST/REALTIME/CMAF/index.m3u8"
+   ]
+  },
+  {
+   "name": "QVC",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/qvc.png",
+   "group": "Altro",
+   "id": "QVC.it",
+   "number": 32,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://qrg.akamaized.net/hls/live/2017383/lsqvc1it/master.m3u8"
+   ]
+  },
+  {
+   "name": "Food Network",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/foodnetwork.png",
+   "group": "Discovery",
+   "id": "FoodNetwork.it",
+   "number": 33,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c3-samsung-it-1836.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-foodnetwork-samsungit/playlist.m3u8",
+    "https://streaming.aurora.enhanced.live/live/mpc/enl0eG1mLmVncmVzcy5mZDJ2eHI=/out/v1/IT_SIMULCAST/FOODNETWORK/CMAF/index.m3u8"
+   ]
+  },
+  {
+   "name": "Cine34",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/cine34.png",
+   "group": "Mediaset",
+   "id": "Cine34.it",
+   "number": 34,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-b6/b6-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-b6/b6-clr.isml/index.m3u8",
+    "https://live3-mediaset-it.akamaized.net/Content/hls_h0_clr_vos/live/channel(b6)/index.m3u8"
+   ]
+  },
+  {
+   "name": "FOCUS",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/focus.png",
+   "group": "Mediaset",
+   "id": "Focus.it",
+   "number": 35,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-fu/fu-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-fu/fu-clr.isml/index.m3u8"
+   ]
+  },
+  {
+   "name": "RTL 102.5",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rtl1025tv.png",
+   "group": "Radio",
+   "id": "RTL102.5TV.it",
+   "number": 36,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://dd782ed59e2a4e86aabf6fc508674b59.msvdn.net/live/S97044836/tbbP8T1ZRPBL/playlist_video.m3u8",
+    "https://dd782ed59e2a4e86aabf6fc508674b59.msvdn.net/live/S97044836/tbbP8T1ZRPBL/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Warner TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/warnertv.png",
+   "group": "Discovery",
+   "id": "WarnerTV.it",
+   "number": 37,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c4-samsung-it-1837.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-warnertv-samsungit/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Giallo",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/giallo.png",
+   "group": "Discovery",
+   "id": "GialloTV.it",
+   "number": 38,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c5-samsung-it-1838.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-giallo-samsungit/playlist.m3u8",
+    "https://streaming.aurora.enhanced.live/live/mpc/enl0eG1mLmVncmVzcy5mZDJ2eHI=/out/v1/IT_SIMULCAST/GIALLO/CMAF/index.m3u8"
+   ]
+  },
+  {
+   "name": "Top Crime",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/topcrime.png",
+   "group": "Mediaset",
+   "id": "TopCrime.it",
+   "number": 39,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-lt/lt-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-lt/lt-clr.isml/index.m3u8",
+    "https://live3-mediaset-it.akamaized.net/content/hls_h0_clr_vos/live/channel(lt)/index.m3u8"
+   ]
+  },
+  {
+   "name": "Boing",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/boing.png",
+   "group": "Mediaset",
+   "id": "Boing.it",
+   "number": 40,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-kb/kb-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-kb/kb-clr.isml/index.m3u8"
+   ]
+  },
+  {
+   "name": "K2",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/k2.png",
+   "group": "Discovery",
+   "id": "K2.it",
+   "number": 41,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c6-samsung-it-1839.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-k2-samsungit/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Rai Gulp",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/raigulp.png",
+   "group": "Rai",
+   "id": "RaiGulp.it",
+   "number": 42,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746953&output=7&forceUserAgent=raiplayappletv",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746953&output=7&forceUserAgent=rainet/4.0.5",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746953"
+   ]
+  },
+  {
+   "name": "Rai Yoyo",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/raiyoyo.png",
+   "group": "Rai",
+   "id": "RaiYoyo.it",
+   "number": 43,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746899&output=7&forceUserAgent=raiplayappletv",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746899&output=7&forceUserAgent=rainet/4.0.5"
+   ]
+  },
+  {
+   "name": "Frisbee",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/frisbee.png",
+   "group": "Discovery",
+   "id": "Frisbee.it",
+   "number": 44,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c7-samsung-it-1840.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-frisbee-samsungit/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Cartoonito",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/cartoonito.png",
+   "group": "Mediaset",
+   "id": "Cartoonito.it",
+   "number": 46,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-la/la-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-la/la-clr.isml/index.m3u8"
+   ]
+  },
+  {
+   "name": "Super!",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/super.png",
+   "group": "Altro",
+   "id": "Super.it",
+   "number": 47,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://vimnitaly.akamaized.net/hls/live/2094034/super/master.m3u8",
+    "https://495c5a85d9074f29acffeaea9e0215eb.msvdn.net/super/super_main/super_main_hbbtv/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Rai News 24",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rainews24.png",
+   "group": "Rai",
+   "id": "RaiNews24.it",
+   "number": 48,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=1&output=7&forceUserAgent=raiplayappletv",
+    "https://d3k8wzt41aflvx.cloudfront.net/RAINEWS24/Live.m3u8",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=1&output=7&forceUserAgent=rainet/4.0.5",
+    "https://rainews1-live.akamaized.net/hls/live/598326/rainews1/rainews1/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Italia 2",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/italia2.png",
+   "group": "Mediaset",
+   "id": "Italia2.it",
+   "number": 49,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-i2/i2-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-i2/i2-clr.isml/index.m3u8",
+    "https://59d7d6f47d7fc.streamlock.net/italia2/italia2/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Sky TG24",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/skytg24.png",
+   "group": "Sky",
+   "id": "SkyTG24.it",
+   "number": 50,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://hlslive-web-gcdn-skycdn-it.akamaized.net/TACT/12221/web/master.m3u8?hdnts=st=1701861650~exp=1765449000~acl=/*~hmac=84c9f3f71e57b13c3a67afa8b29a8591ea9ed84bf786524399545d94be1ec04d",
+    "https://hlslive-web-gcdn-skycdn-it.akamaized.net/TACT/12221/web/master.m3u8?hdnts=st=1764666351~exp=1829466206~acl=/*~hmac=b0e9165b6c55027903ad103c8219f363d8765eb300c0d9a339e9767fc3509556"
+   ]
+  },
+  {
+   "name": "TGCOM 24",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/tgcom24.png",
+   "group": "Mediaset",
+   "id": "TGCom24.it",
+   "number": 51,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-kf/kf-clr.isml/manifest.mpd",
+    "https://d3k8wzt41aflvx.cloudfront.net/TGCOM24/Live.m3u8",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-kf/kf-clr.isml/index.m3u8"
+   ]
+  },
+  {
+   "name": "DMAX",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/dmax.png",
+   "group": "Discovery",
+   "id": "DMAX.it",
+   "number": 52,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c8-samsung-it-1841.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-dmax-samsungit/playlist.m3u8",
+    "https://streaming.aurora.enhanced.live/live/mpc/enl0eG1mLmVncmVzcy5mZDJ2eHI=/out/v1/IT_SIMULCAST/DMAX/CMAF/index.m3u8"
+   ]
+  },
+  {
+   "name": "Rai Storia",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/raistoria.png",
+   "group": "Rai",
+   "id": "RaiStoria.it",
+   "number": 54,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746990&output=7&forceUserAgent=raiplayappletv",
+    "https://d3k8wzt41aflvx.cloudfront.net/RAIStoria/Live.m3u8",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746990&output=7&forceUserAgent=rainet/4.0.5"
+   ]
+  },
+  {
+   "name": "Mediaset Extra",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/mediasetextra.png",
+   "group": "Mediaset",
+   "id": "MediasetExtra.it",
+   "number": 55,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msf.cdn.mediaset.net/live/ch-kq/kq-clr.isml/manifest.mpd",
+    "https://live02-seg.msf.cdn.mediaset.net/live/ch-kq/kq-clr.isml/index.m3u8",
+    "https://live3-mediaset-it.akamaized.net/Content/hls_h0_clr_vos/live/channel(kq)/index.m3u8"
+   ]
+  },
+  {
+   "name": "HGTV - Home&Garden",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/homegardentv.png",
+   "group": "Discovery",
+   "id": "Home&GardenTV.it",
+   "number": 56,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c9-samsung-it-1842.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-hgtv-samsungit/playlist.m3u8",
+    "https://streaming.aurora.enhanced.live/live/mpc/enl0eG1mLmVncmVzcy5mZDJ2eHI=/out/v1/IT_SIMULCAST/HGTV/CMAF/index.m3u8"
+   ]
+  },
+  {
+   "name": "Rai Scuola",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/raiscuola.png",
+   "group": "Rai",
+   "id": "RaiScuola.it",
+   "number": 57,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747011&output=7&forceUserAgent=raiplayappletv",
+    "https://d3k8wzt41aflvx.cloudfront.net/RAIScuola/Live.m3u8",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747011&output=7&forceUserAgent=rainet/4.0.5"
+   ]
+  },
+  {
+   "name": "Rai Sport + HD",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/raisport+hd.png",
+   "group": "Rai",
+   "id": "RaiSport+HD.it",
+   "number": 58,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=358025&output=7&forceUserAgent=raiplayappletv",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=358025&output=7&forceUserAgent=rainet/4.0.5",
+    "https://7nyaler.streamhostingcdn.top/stream/2/index.m3u8"
+   ]
+  },
+  {
+   "name": "Motor Trend",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/motortrend.png",
+   "group": "Discovery",
+   "id": "MotorTrendTV.it",
+   "number": 59,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://amg16146-wbdi-amg16146c10-samsung-it-1843.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-motortrend-samsungit/playlist.m3u8",
+    "https://streaming.aurora.enhanced.live/live/mpc/enl0eG1mLmVncmVzcy5mZDJ2eHI=/out/v1/IT_SIMULCAST/TURBO/CMAF/index.m3u8"
+   ]
+  },
+  {
+   "name": "Sportitalia",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/sportitalia.png",
+   "group": "Altro",
+   "id": "Sportitalia.it",
+   "number": 60,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://sportitaliaamd.akamaized.net/live/Sportitalia/hls/F59D8EB0332E783633CDDE8E265844975635D24F/index.m3u8",
+    "https://sportsitalia-samsungitaly.amagi.tv/playlist.m3u8",
+    "https://edge-001.streamup.eu/sportitalia/sihd_abr/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Donna TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/donnatv.png",
+   "group": "Altro",
+   "id": "DonnaTV.it",
+   "number": 62,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://sportitaliaamd.akamaized.net/live/Donna_TV/hls/42EB42E58EA44362045EFEA804E3FCF0DB33C481/index.m3u8",
+    "https://5f11919dca3bd.streamlock.net/donnatv/donnatv/playlist.m3u8",
+    "https://streaming.softwarecreation.it/DonnaTv/DonnaTv/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Supertennis",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/supertennis.png",
+   "group": "Altro",
+   "id": "SuperTennis.it",
+   "number": 64,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c0-16/restreamer/rtmp/hls/h24_supertennix/manifest.m3u8",
+    "https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c0-16/restreamer/outgest/aa3673f1-e178-44a9-a947-ef41db73211a/manifest.m3u8"
+   ]
+  },
+  {
+   "name": "ALMA TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/almatv.png",
+   "group": "Altro",
+   "id": "AlmaTv.it",
+   "number": 65,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://streaming.softwarecreation.it/AlmaTv/AlmaTv/playlist.m3u8",
+    "https://5f11919dca3bd.streamlock.net/almatv/almatv/playlist.m3u8",
+    "http://151.0.207.99:1935/AlmaTv/AlmaTv/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Radio 105 TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/radio105tv.png",
+   "group": "Radio",
+   "id": "Radio105TV.it",
+   "number": 66,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msr.cdn.mediaset.net/live/ch-ec/ec-clr.isml/manifest.mpd",
+    "https://live02-seg.msr.cdn.mediaset.net/live/ch-ec/ec-clr.isml/index.m3u8"
+   ]
+  },
+  {
+   "name": "R101 TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/r101tv.png",
+   "group": "Radio",
+   "id": "R101TV.it",
+   "number": 67,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msr.cdn.mediaset.net/live/ch-er/er-clr.isml/manifest.mpd",
+    "https://live02-seg.msr.cdn.mediaset.net/live/ch-er/er-clr.isml/index.m3u8"
+   ]
+  },
+  {
+   "name": "BOM CHANNEL",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/bomchannel.png",
+   "group": "Altro",
+   "id": "BOMChannel.it",
+   "number": 68,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://5f22d76e220e1.streamlock.net/canale6/canale6/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Deejay TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/deejaytv.png",
+   "group": "Radio",
+   "id": "DeejayTV.it",
+   "number": 69,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://4c4b867c89244861ac216426883d1ad0.msvdn.net/live/S85984808/sMO0tz9Sr2Rk/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "RadioItaliaTV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/radioitaliatv.png",
+   "group": "Radio",
+   "id": "RadioItaliaTV.it",
+   "number": 70,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://radioitaliatv.akamaized.net/hls/live/2093117/RadioitaliaTV/master.m3u8"
+   ]
+  },
+  {
+   "name": "Rai 4K (HbbTV)",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rai4k.png",
+   "group": "Rai",
+   "id": "Rai4K.it",
+   "number": 101,
+   "ua": "Mozilla/5.0",
+   "ref": "",
+   "urls": [
+    "https://raievent10-elem-live.akamaized.net/hls/live/619189/raievent10/raievent10/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Padre Pio TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/padrepiotv.png",
+   "group": "Altro",
+   "id": "PadrePioTV.it",
+   "number": 145,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://600f07e114306.streamlock.net/PadrePioTV/livestream/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "RADIO KISS KISS TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/radiokisskisstv.png",
+   "group": "Radio",
+   "id": "RadioKissKiss.it",
+   "number": 158,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://kk.fluid.stream/KKMulti/smil:KissKissTV.smil/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Rai Radio 2 Visual",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rairadio2visual.png",
+   "group": "Radio",
+   "id": "RaiRadio2.it",
+   "number": 202,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=5674080&output=7&forceUserAgent=raiplayappletv",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=5674080&output=7&forceUserAgent=rainet/4.0.5"
+   ]
+  },
+  {
+   "name": "RTL 102.5 News",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rtl1025tv.png",
+   "group": "Radio",
+   "id": "RTL102.5News.it",
+   "number": 233,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://dd782ed59e2a4e86aabf6fc508674b59.msvdn.net/live/S38122967/2lyQRIAAGgRR/playlist_video.m3u8"
+   ]
+  },
+  {
+   "name": "VIRGIN RADIO",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/virginradiotv.png",
+   "group": "Radio",
+   "id": "VirginRadio.it",
+   "number": 257,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msr.cdn.mediaset.net/live/ch-ew/ew-clr.isml/manifest.mpd"
+   ]
+  },
+  {
+   "name": "RADIOFRECCIA",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/radiofrecciatv.png",
+   "group": "Radio",
+   "id": "RadioFrecciaTV.it",
+   "number": 258,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://dd782ed59e2a4e86aabf6fc508674b59.msvdn.net/live/S3160845/0tuSetc8UFkF/playlist_video.m3u8",
+    "https://dd782ed59e2a4e86aabf6fc508674b59.msvdn.net/live/S3160845/0tuSetc8UFkF/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Byoblu",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/byoblu.png",
+   "group": "Altro",
+   "id": "ByoBlu.it",
+   "number": 262,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://09bd1346f7a44cc9ac230cc1cb22ca4f.msvdn.net/live/S39249178/EnTK3KeeN1Eg/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "RDS Social TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rdssocialtv.png",
+   "group": "Radio",
+   "id": "rds",
+   "number": 265,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://stream.rdstv.radio/index.m3u8",
+    "https://stream.rdstv.radio/out/v1/ec85f72b87f04555aa41d616d5be41dc/index.m3u8"
+   ]
+  },
+  {
+   "name": "RADIO ZETA",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/radiozetatv.png",
+   "group": "Radio",
+   "id": "RadioZeta.it",
+   "number": 266,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://dd782ed59e2a4e86aabf6fc508674b59.msvdn.net/live/S9346184/XEx1LqlYbNic/playlist_video.m3u8",
+    "https://dd782ed59e2a4e86aabf6fc508674b59.msvdn.net/live/S9346184/XEx1LqlYbNic/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Radio Capital TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/radiocapitaltv.png",
+   "group": "Radio",
+   "id": "RadioCapitalTv.it",
+   "number": 713,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://4c4b867c89244861ac216426883d1ad0.msvdn.net/live/S35394734/Z6U2wGoDYANk/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "M2O TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/radiom2otv.png",
+   "group": "Radio",
+   "id": "M2OTv.it",
+   "number": 715,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://4c4b867c89244861ac216426883d1ad0.msvdn.net/live/S62628868/uhdWBlkC1AoO/playlist.m3u8"
+   ]
+  },
+  {
+   "name": "Radio Montecarlo TV",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/radiomontecarlotv.png",
+   "group": "Radio",
+   "id": "RadioMontecarlo.it",
+   "number": 772,
+   "ua": "HbbTV/1.6.1",
+   "ref": "",
+   "urls": [
+    "https://live03-col.msr.cdn.mediaset.net/live/ch-bb/bb-clr.isml/manifest.mpd",
+    "https://live02-seg.msr.cdn.mediaset.net/live/ch-bb/bb-clr.isml/index.m3u8"
+   ]
+  },
+  {
+   "name": "RTV San Marino",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/rtvsanmarino.png",
+   "group": "Radio",
+   "id": "RTVSanMarino.it",
+   "number": 831,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://d2hrvno5bw6tg2.cloudfront.net/smrtv-ch01/_definst_/smil:ch-01.smil/chunklist_b2192000_slita.m3u8"
+   ]
+  },
+  {
+   "name": "Radio TV Serie A con RDS",
+   "logo": "https://cdn.jsdelivr.net/gh/Tundrak/IPTV-Italia/logos/radiotvseriea.png",
+   "group": "Radio",
+   "id": "RadioTvSerieA.it",
+   "number": 899,
+   "ua": "",
+   "ref": "",
+   "urls": [
+    "https://stream.radioseriea.com/50773f0d0070476a8612d9984c6059d8/index.m3u8",
+    "https://legaseriea-live-prd.cdn.netrw.it/out/v1/s-prd/ch-01-prd-s-v2/hls-ch-01-prd-s-hd/index%2Em3u8"
+   ]
+  }
+ ]
+}

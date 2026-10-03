@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spij TV</title>
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0a0c">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root{
+    /* colori del logo Spij: arancio -> viola */
+    --bg:#0a0a0c; --bg2:#141418; --accent:#ff6a2b; --accent2:#8b3dff;
+    --grad:linear-gradient(90deg, #ff8a1f, #e8457a 55%, #7b3cff);
+    --text:#ffffff; --muted:#a3a3ad; --dim:#6b6b75; --live:#e50914; --gold:#ffc83d;
+    --pad:4vw;
+    --card-w:clamp(150px, 15vw, 280px);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0}
+  body{
+    background:var(--bg); color:var(--text); overflow:hidden;
+    font-family:"Netflix Sans","Helvetica Neue",Segoe UI,Roboto,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .spinner{width:44px; height:44px; border:4px solid #ffffff2a; border-top-color:var(--accent); border-radius:50%; animation:sp .8s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  /* ---------- schermata di avvio ---------- */
+  #loadScreen{position:fixed; inset:0; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; z-index:30}
+  #loadScreen .brand{font-size:44px}
+  #loadScreen .err{color:var(--muted); font-size:13px; max-width:420px; text-align:center}
+  #loadScreen button{background:var(--accent); color:#fff; border:none; border-radius:6px; padding:10px 24px; font-size:15px; font-weight:700; cursor:pointer}
+  .brand{display:flex; align-items:center; gap:.4em; font-weight:800; letter-spacing:.02em; font-size:26px; color:#fff; text-shadow:0 2px 10px #0008}
+  .brand img{width:1.35em; height:1.35em; object-fit:contain}
+  .brand b{font-weight:900; font-size:.62em; letter-spacing:.08em; padding:.18em .45em; border-radius:.3em; margin-left:-.1em;
+    background:var(--grad); color:#fff; text-shadow:none}
+  #loadScreen .brand img{width:1.8em; height:1.8em; animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{50%{transform:scale(1.08); filter:drop-shadow(0 0 18px #ff7a2a88)}}
+
+  /* ---------- hero (anteprima grande) ---------- */
+  #app{height:100vh; display:none; flex-direction:column}
+  #hero{position:relative; height:58vh; flex-shrink:0; overflow:hidden; cursor:pointer}
+  #previewVideo{position:absolute; top:0; right:0; width:70%; height:100%; object-fit:cover; background:#000}
+  #hero .shade{position:absolute; inset:0; pointer-events:none;
+    background:
+      linear-gradient(90deg, var(--bg) 30%, rgba(10,10,12,.88) 40%, rgba(10,10,12,.25) 62%, transparent 80%),
+      linear-gradient(0deg, var(--bg) 0%, rgba(10,10,12,.6) 18%, transparent 45%),
+      linear-gradient(180deg, rgba(10,10,12,.7) 0%, transparent 22%);}
+  #heroSpin, #heroErr{position:absolute; top:0; right:0; width:70%; height:100%; display:none; align-items:center; justify-content:center}
+  #heroErr{flex-direction:column; gap:6px; color:var(--muted); font-size:15px; text-align:center}
+  #heroErr b{color:#fff; font-size:18px}
+  .topbar{position:absolute; top:0; left:0; right:0; display:flex; align-items:center; gap:18px; padding:2.4vh var(--pad); z-index:2}
+  .topbar .clock{margin-left:auto; font-size:20px; font-weight:300; color:#ddd}
+  #installBtn{display:none; background:#ffffff22; color:#fff; border:none; border-radius:4px; padding:6px 12px; font-size:13px; cursor:pointer}
+  #heroInfo{position:absolute; left:var(--pad); top:12vh; width:44%; z-index:2}
+  #heroInfo .chrow{display:flex; align-items:center; gap:14px; margin-bottom:1.6vh}
+  #heroInfo .chlogo{width:clamp(44px,5vw,80px); height:clamp(44px,5vw,80px); object-fit:contain; filter:drop-shadow(0 2px 8px #000a)}
+  #heroInfo .chname{font-size:clamp(14px,1.4vw,22px); font-weight:700; color:#ddd}
+  #heroInfo .chnum{color:var(--muted); font-weight:400; margin-right:6px}
+  .live{display:inline-flex; align-items:center; gap:6px; background:var(--live); color:#fff; font-size:11px; font-weight:800; letter-spacing:1px; padding:3px 8px; border-radius:3px}
+  .live::before{content:""; width:7px; height:7px; border-radius:50%; background:#fff; animation:blink 1.6s infinite}
+  @keyframes blink{50%{opacity:.25}}
+  #heroInfo .title{font-size:clamp(24px,3.4vw,58px); font-weight:900; line-height:1.05; margin:1.2vh 0; letter-spacing:-.5px;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-shadow:0 2px 12px #000a}
+  #heroInfo .meta{display:flex; align-items:center; gap:12px; font-size:clamp(12px,1.05vw,17px); color:#ddd}
+  #heroInfo .meta .pbar{width:clamp(80px,10vw,180px)}
+  #heroInfo .desc{margin-top:1.4vh; font-size:clamp(12px,1.05vw,17px); line-height:1.45; color:#cfcfd6;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-shadow:0 1px 6px #000}
+  #heroInfo .next{margin-top:1.6vh; font-size:clamp(11px,.95vw,15px); color:var(--muted)}
+  #heroInfo .next b{color:#fff; font-weight:700; letter-spacing:.5px; margin-right:6px}
+  .pbar{height:4px; background:#ffffff33; border-radius:2px; overflow:hidden}
+  .pbar > i{display:block; height:100%; background:var(--grad)}
+
+  /* ---------- file di canali ---------- */
+  #rows{flex:1; overflow:hidden; margin-top:-7vh; position:relative; z-index:3; padding-bottom:20vh}
+  .lane{margin-bottom:2.2vh}
+  .lane h2{font-size:clamp(14px,1.35vw,22px); font-weight:700; margin:0 0 1vh; padding-left:var(--pad); color:#e5e5e5; transition:color .2s}
+  .lane.active h2{color:#fff}
+  .track{display:flex; gap:.9vw; overflow-x:auto; overflow-y:visible; scrollbar-width:none; padding:1.4vh var(--pad) 1.8vh}
+  .track::-webkit-scrollbar{display:none}
+  .card{flex:0 0 var(--card-w); cursor:pointer; transition:transform .18s ease, opacity .2s; transform-origin:center; position:relative}
+  .card .thumb{position:relative; aspect-ratio:16/9; border-radius:6px; overflow:hidden;
+    background:linear-gradient(135deg, hsl(var(--h) 55% 30%), hsl(calc(var(--h) + 35) 60% 12%));
+    display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px #0008}
+  .card .thumb::after{content:""; position:absolute; inset:0; background:radial-gradient(circle at 30% 20%, #ffffff22, transparent 60%); pointer-events:none}
+  .card .thumb img{width:46%; height:56%; object-fit:contain; filter:drop-shadow(0 3px 6px #0009)}
+  .card .num{position:absolute; left:8px; top:6px; font-size:12px; font-weight:800; color:#ffffffcc}
+  .card .fav{position:absolute; right:8px; top:5px; color:var(--gold); font-size:14px}
+  .card .tag{position:absolute; right:6px; bottom:10px; font-size:10px; font-weight:800; letter-spacing:.5px; padding:2px 6px; border-radius:3px; background:#000a; color:var(--muted)}
+  .card .tag:empty{display:none}
+  .card .thumb .pbar{position:absolute; left:0; right:0; bottom:0; border-radius:0; height:3px}
+  .card .cap{padding:.8vh 2px 0; opacity:.75; transition:opacity .2s}
+  .card .cn{font-size:clamp(12px,.95vw,15px); font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .card .cp{font-size:clamp(11px,.85vw,13px); color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-height:1.3em}
+  .card.dead .thumb{filter:grayscale(1) brightness(.5)}
+  .card.playing .thumb{box-shadow:0 0 0 2px #ffffff55, 0 4px 14px #0008}
+  .card.focus{transform:scale(1.1); z-index:2}
+  .card.focus .thumb{box-shadow:0 0 0 3px #fff, 0 10px 30px #000c}
+  .card.focus .cap{opacity:1}
+
+  /* ---------- schermo intero ---------- */
+  #fs{position:fixed; inset:0; background:#000; display:none; z-index:20}
+  #fs.show{display:block}
+  #fs video{width:100%; height:100%; object-fit:contain; background:#000}
+  #fsSpin{position:absolute; inset:0; display:none; align-items:center; justify-content:center}
+  #fsErr{position:absolute; inset:0; display:none; flex-direction:column; gap:8px; align-items:center; justify-content:center; text-align:center; font-size:20px; font-weight:700; background:#000c}
+  #fsErr span{font-size:14px; color:var(--muted); font-weight:400}
+  #fsNumBuf{position:absolute; top:5vh; right:4vw; background:#000c; padding:10px 22px; border-radius:8px; font-size:40px; font-weight:900; display:none; border-left:4px solid var(--accent)}
+  #fsInfo{position:absolute; left:0; right:0; bottom:0; padding:12vh var(--pad) 6vh; display:flex; align-items:flex-end; gap:22px;
+    background:linear-gradient(0deg, #000e 0%, #000a 50%, transparent 100%); opacity:0; transition:opacity .3s; pointer-events:none}
+  #fsInfo.show{opacity:1}
+  #fsInfo img{width:clamp(56px,6vw,96px); height:clamp(56px,6vw,96px); object-fit:contain}
+  #fsInfo .col{flex:1; min-width:0}
+  #fsInfo .cname{font-size:clamp(14px,1.3vw,20px); color:#ddd; font-weight:700; margin:8px 0 2px}
+  #fsInfo .ptitle{font-size:clamp(22px,2.6vw,42px); font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  #fsInfo .row2{display:flex; align-items:center; gap:14px; margin-top:8px; font-size:clamp(12px,1vw,16px); color:#ccc}
+  #fsInfo .row2 .pbar{flex:0 0 clamp(120px,22vw,420px)}
+  #fsInfo .pnext{margin-top:6px; font-size:clamp(11px,.95vw,15px); color:var(--muted)}
+  #fsInfo .hint{font-size:12px; color:var(--dim); text-align:right; white-space:nowrap}
+
+  /* ---------- registro diagnostico ---------- */
+  #dbgBtn{position:fixed; right:10px; bottom:10px; z-index:40; width:30px; height:30px; border-radius:50%;
+    background:#ffffff14; border:none; color:#fff; font-size:14px; cursor:pointer; opacity:.5}
+  #dbgPanel{position:fixed; right:10px; bottom:48px; z-index:40; width:min(560px,90vw); max-height:60vh;
+    background:#000000ee; border-radius:10px; padding:10px; display:none; flex-direction:column; gap:6px}
+  #dbgPanel.open{display:flex}
+  #dbgPanel .bar{display:flex; gap:8px; align-items:center}
+  #dbgPanel button{background:var(--accent); color:#fff; border:none; border-radius:4px; padding:4px 10px; font-size:12px; cursor:pointer}
+  #dbgList{overflow-y:auto; font-family:monospace; font-size:11px; white-space:pre-wrap; color:#a3a3ad; line-height:1.5}
+
+  @media (max-width:700px){
+    #hero{height:48vh}
+    #previewVideo, #heroSpin, #heroErr{width:100%}
+    #hero .shade{background:linear-gradient(0deg, var(--bg) 5%, rgba(10,10,12,.75) 45%, rgba(10,10,12,.2) 100%)}
+    #heroInfo{width:auto; right:var(--pad); top:auto; bottom:9vh}
+    #heroInfo .desc{display:none}
+    :root{--card-w:42vw}
+  }
+</style>
+</head>
+<body>
+
+<div id="loadScreen">
+  <div class="brand"><img src="logo.png" alt="">Spij<b>TV</b></div>
+  <div class="spinner" id="loadSpin"></div>
+  <div class="err" id="loadErr" style="display:none"></div>
+  <button id="retryBtn" style="display:none">Riprova</button>
+</div>
+
+<div id="app">
+  <div id="hero">
+    <video id="previewVideo" muted playsinline></video>
+    <div id="heroSpin"><div class="spinner"></div></div>
+    <div id="heroErr"><b>Canale non disponibile</b>Nessuna sorgente funzionante in questo momento</div>
+    <div class="shade"></div>
+    <div class="topbar">
+      <div class="brand"><img src="logo.png" alt="">Spij<b>TV</b></div>
+      <button id="installBtn">Installa app</button>
+      <div class="clock" id="clock">--:--</div>
+    </div>
+    <div id="heroInfo"></div>
+  </div>
+  <div id="rows"></div>
+</div>
+
+<button id="dbgBtn" title="Registro diagnostico">🐞</button>
+<div id="dbgPanel">
+  <div class="bar">
+    <b style="font-size:13px">Registro diagnostico</b>
+    <span style="flex:1"></span>
+    <button id="dbgCopy">Copia</button>
+    <button id="dbgClose">Chiudi</button>
+  </div>
+  <div id="dbgList"></div>
+</div>
+
+<div id="fs">
+  <video id="fsVideo" playsinline></video>
+  <div id="fsSpin"><div class="spinner"></div></div>
+  <div id="fsErr">Canale non disponibile<span>▲▼ cambia canale · Indietro torna alla guida</span></div>
+  <div id="fsNumBuf"></div>
+  <div id="fsInfo">
+    <img id="fsInfoLogo" src="" alt="">
+    <div class="col">
+      <span class="live">IN DIRETTA</span>
+      <div class="cname" id="fsInfoName"></div>
+      <div class="ptitle" id="fsInfoProg"></div>
+      <div class="row2"><span id="fsInfoTime"></span><div class="pbar"><i id="fsInfoBar" style="width:0%"></i></div></div>
+      <div class="pnext" id="fsInfoNext"></div>
+    </div>
+    <div class="hint">▲▼ canale · ◀ precedente<br>tieni premuto OK = preferito</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.15/hls.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/4.7.4/dash.all.min.js"></script>
+<script>
+// ==================== CONFIGURAZIONE ====================
+// Dove si trovano channels.json ed epg.json. Vuoto = stessa cartella della
+// pagina (va bene finché l'app è il sito su GitHub Pages). Quando i file della
+// pagina verranno messi DENTRO l'app Android, qui va l'indirizzo del sito,
+// es. "https://tuonome.github.io/mia-tv/", così l'app scarica sempre i dati
+// aggiornati ogni 6 ore dall'automatismo di GitHub.
+const DATA_BASE = "";
+// channels.json ed epg.json li preparano tools/build_channels.py e
+// tools/build_epg.py, lanciati ogni 6 ore da .github/workflows/update-epg.yml:
+// lato server non esiste il blocco CORS dei browser e si può filtrare/unire
+// tutto prima, così la chiavetta scarica solo pochi KB già pronti.
+const CHANNELS_JSON_URL = DATA_BASE + "channels.json";
+const EPG_JSON_URL = DATA_BASE + "epg.json";
+// Riserva se channels.json non è raggiungibile: la playlist originale (una
+// sola sorgente per canale).
+const PLAYLIST_URL = "https://raw.githubusercontent.com/Tundrak/IPTV-Italia/main/iptvitaplus.m3u";
+const GROUP_ORDER = ["Rai","Mediaset","Discovery","Sky","Altro","Radio"];
+const GROUP_HUE = {Rai:215, Mediaset:200, Discovery:265, Sky:190, Altro:340, Radio:25};
+
+// ==================== STATO ====================
+function loadJSON(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch(e){ return d; } }
+let channels = [];
+let favs = new Set(loadJSON('iptv_favs', []));
+// La versione precedente, per un bug, poteva segnare come "morti" per sbaglio
+// canali che invece funzionavano. Alla prima apertura di questa versione
+// l'elenco viene svuotato una volta, così si riparte puliti.
+if(localStorage.getItem('iptv_dead_v') !== '3'){
+  localStorage.setItem('iptv_dead', '[]');
+  localStorage.setItem('iptv_dead_v', '3');
+}
+let dead = new Set(loadJSON('iptv_dead', []));
+let recents = loadJSON('iptv_recents', []);   // url dei canali guardati, il più recente per primo
+let altMap = loadJSON('iptv_alt', {});        // url canale -> indice della sorgente che ha funzionato
+let epg = {};              // chiave canale -> [{start,stop,title,desc}]
+let epgStatus = 'loading'; // 'loading' | 'ok' | 'failed'
+
+let lanes = [];            // [{title, items:[ch], el, cards:[el]}]
+let laneIdx = 0;
+let colIdx = 0;
+let current = null;        // canale in riproduzione
+let fullscreen = false;
+let lanesDirty = false;
+let previewTimer = null;
+let numBuf = '', numTimer = null;
+
+function saveFavs(){ localStorage.setItem('iptv_favs', JSON.stringify([...favs])); }
+function saveDead(){ localStorage.setItem('iptv_dead', JSON.stringify([...dead])); }
+function norm(s){
+  let t = (s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  if(t.length>4 && t.endsWith('it')) t = t.slice(0,-2);
+  return t;
+}
+function esc(s){ return String(s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]); }
+
+// ==================== LOG DIAGNOSTICO ====================
+const debugLog = [];
+function dbg(msg){
+  const line = new Date().toLocaleTimeString('it-IT') + '  ' + msg;
+  debugLog.unshift(line);
+  if(debugLog.length > 200) debugLog.length = 200;
+  console.log(msg);
+  if(document.getElementById('dbgPanel').classList.contains('open')) renderDbg();
+}
+function renderDbg(){ document.getElementById('dbgList').textContent = debugLog.join('\n'); }
+
+// ==================== CARICAMENTO CANALI ====================
+function parseM3U(text){
+  const out = [];
+  let name='',logo='',group='Altro',id='',chno=0,ua='',ref='';
+  for(const raw of text.split(/\r?\n/)){
+    const line = raw.trim();
+    if(line.startsWith('#EXTINF')){
+      name = line.split(',').slice(1).join(',').trim();
+      logo = (line.match(/tvg-logo="([^"]*)"/)||[])[1]||'';
+      group = (line.match(/group-title="([^"]*)"/)||[])[1]||'Altro';
+      id = (line.match(/tvg-id="([^"]*)"/)||[])[1]||'';
+      chno = parseInt((line.match(/tvg-chno="(\d+)"/)||[])[1]||'0',10);
+    } else if(/^#EXTVLCOPT:http-user-agent=/i.test(line)){
+      ua = line.split('=').slice(1).join('=').trim();
+    } else if(/^#EXTVLCOPT:http-referrer=/i.test(line)){
+      ref = line.split('=').slice(1).join('=').trim();
+    } else if(line && !line.startsWith('#')){
+      out.push({name:name||line, logo, group:group||'Altro', urls:[line], number:chno, id, ua, ref});
+      name='';logo='';group='Altro';id='';chno=0;ua='';ref='';
+    }
+  }
+  return out;
+}
+function prepareChannels(list){
+  list.forEach(c=>{ c.url = c.urls[0]; }); // il primo link fa da identificativo (preferiti, ultimi visti…)
+  list.sort((a,b)=>(a.number||9999)-(b.number||9999));
+  let n = Math.max(0, ...list.map(c=>c.number||0));
+  list.forEach(c=>{ if(!c.number) c.number = ++n; });
+  list.forEach(c=>{ c.keys = [norm(c.id), norm(c.name)].filter(Boolean); });
+  return list;
+}
+async function loadChannels(){
+  try{
+    const res = await fetch(CHANNELS_JSON_URL, {cache:'no-cache'});
+    if(!res.ok) throw new Error('http '+res.status);
+    const data = await res.json();
+    dbg('Canali OK  →  channels.json');
+    return prepareChannels(data.channels);
+  }catch(e){
+    dbg('channels.json KO ('+e.message+')  →  uso la playlist originale');
+    const res = await fetch(PLAYLIST_URL);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    return prepareChannels(parseM3U(await res.text()));
+  }
+}
+
+// ==================== GUIDA PROGRAMMI ====================
+async function loadEpg(){
+  try{
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), 15000);
+    const res = await fetch(EPG_JSON_URL, {cache:'no-cache', signal:ctrl.signal}).finally(()=>clearTimeout(t));
+    if(!res.ok) throw new Error('http '+res.status);
+    const data = await res.json();
+    const out = {};
+    for(const [key, list] of Object.entries(data.channels||{})){
+      out[key] = list.map(([start,stop,title,desc])=>({start,stop,title,desc}));
+    }
+    const age = Math.round((Date.now()-data.generated)/3600e3);
+    dbg('EPG OK  →  '+Object.keys(out).length+' canali, aggiornata '+age+' ore fa');
+    if(age > 24) dbg('EPG vecchia: controlla che l\'automatismo su GitHub stia girando');
+    return out;
+  }catch(e){
+    dbg('EPG KO  '+EPG_JSON_URL+'  →  '+e.message);
+    return null;
+  }
+}
+function epgOf(ch){
+  for(const k of ch.keys){ if(epg[k]) return epg[k]; }
+  return [];
+}
+function nowNext(list){
+  const t = Date.now();
+  const cur = list.find(p=>p.start<=t && t<p.stop) || null;
+  const nxt = list.find(p=>p.start >= (cur?cur.stop:t)) || null;
+  return [cur,nxt];
+}
+function pct(p){ return p ? Math.max(0,Math.min(1,(Date.now()-p.start)/(p.stop-p.start)))*100 : 0; }
+function hm(ts){ return new Date(ts).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}); }
+function minsLeft(p){ return Math.max(0, Math.round((p.stop-Date.now())/60000)); }
+
+// ==================== LETTORE VIDEO ====================
+let hlsInst=null, dashInst=null, playGen=0, stallTimer=null;
+function stopPlayers(){
+  if(hlsInst){ hlsInst.destroy(); hlsInst=null; }
+  if(dashInst){ dashInst.reset(); dashInst=null; }
+}
+function mediaErrName(code){
+  return ({1:'interrotto',2:'errore di rete',3:'errore di decodifica',4:'formato non supportato'})[code] || ('codice '+code);
+}
+// I link Rai passano da un "relinker" che non dà il permesso CORS: da un
+// browser non si possono aprire (nell'app Android invece sì). RAI_PROXY_URL,
+// se compilato, punta a un piccolo server che fa da tramite.
+const RAI_PROXY_URL = ""; // es. "https://tuo-nome.workers.dev/rai"
+function fixRaiUrl(url){
+  if(!/rai\.it\/relinker/.test(url)) return url;
+  if(!RAI_PROXY_URL) return url.replace(/^http:\/\//, 'https://'); // http da pagina https = bloccato
+  const cont = (url.match(/[?&]cont=([^&]*)/)||[])[1];
+  const output = (url.match(/[?&]output=([^&]*)/)||[])[1] || '7';
+  if(!cont) return url;
+  return RAI_PROXY_URL + '?cont=' + encodeURIComponent(cont) + '&output=' + encodeURIComponent(output);
+}
+// Ogni chiamata ha un numero di "generazione": se nel frattempo si è passati a
+// un altro canale, gli eventi tardivi di questa vengono ignorati.
+// Ogni canale può avere più sorgenti (ch.urls): se una non parte si prova la
+// successiva, e quella che funziona viene ricordata per la volta dopo.
+function attachStream(video, ch, cb, st={restarts:0, alt:null, tried:0}){
+  stopPlayers();
+  clearInterval(stallTimer);
+  video.removeAttribute('src');
+  video.load();
+  const gen = ++playGen;
+  const alive = () => gen === playGen;
+  const urls = ch.urls;
+  const alt = st.alt==null ? Math.min(altMap[ch.url]||0, urls.length-1) : st.alt;
+  const raw = urls[alt];
+  const isRai = /rai\.it\/relinker/.test(raw);
+  const url = isRai ? fixRaiUrl(raw) : raw;
+  const tag = ch.name + (urls.length>1 ? ' ['+(alt+1)+'/'+urls.length+']' : '');
+  let started = false;
+  const watchdog = setTimeout(() => { if(alive()){ fail('nessuna risposta in 12 s'); } }, 12000);
+  // Se il flusso si rompe DOPO essere partito non è un canale "morto": lo si
+  // riavvia (max 3 volte di fila) invece di lasciare l'immagine ferma.
+  const restart = (reason) => {
+    if(!alive()) return;
+    dbg('RIAVVIO  '+tag+'  →  '+reason);
+    attachStream(video, ch, cb, {restarts:st.restarts+1, alt, tried:st.tried});
+  };
+  const fail = (reason) => {
+    if(!alive()) return;
+    if(started && st.restarts < 3){ restart(reason||'errore'); return; }
+    clearTimeout(watchdog); clearInterval(stallTimer); stopPlayers();
+    dbg('KO  '+tag+'  ('+url+')  →  '+(reason||'errore generico'));
+    if(st.tried+1 < urls.length){
+      const next = (alt+1) % urls.length;
+      dbg('Provo la sorgente di riserva '+(next+1)+'/'+urls.length+'  '+ch.name);
+      attachStream(video, ch, cb, {restarts:0, alt:next, tried:st.tried+1});
+      return;
+    }
+    cb.onErr();
+  };
+  const ready = () => {
+    if(!alive() || started) return;
+    started = true; clearTimeout(watchdog);
+    dbg('OK  '+tag);
+    if((altMap[ch.url]||0) !== alt){ altMap[ch.url] = alt; localStorage.setItem('iptv_alt', JSON.stringify(altMap)); }
+    cb.onReady();
+    // Controllo blocchi: se l'immagine non avanza per 12 s, riavvia il flusso.
+    let lastT = -1, stuck = 0;
+    stallTimer = setInterval(() => {
+      if(!alive()){ clearInterval(stallTimer); return; }
+      if(video.paused && video.readyState >= 3){ video.play().catch(()=>{}); return; }
+      if(video.currentTime === lastT){ stuck += 3; if(stuck === 6) cb.onWait(); if(stuck >= 12) restart('immagine ferma da 12 s'); }
+      else { if(stuck >= 6) cb.onReady(); stuck = 0; lastT = video.currentTime; }
+    }, 3000);
+  };
+  const playNow = () => { if(alive()) video.play().catch(()=>{}); };
+  cb.onWait();
+  dbg('Provo  '+tag+'  →  '+url);
+  try{
+    if(url.includes('.mpd')){
+      // NB: niente video.play() qui. Con i live DASH (Mediaset) chiamarlo prima
+      // che dash.js si sia posizionato sul "live" lo manda in confusione: carica
+      // 2-3 pezzi e poi smette, e dopo ~10 s l'immagine si blocca.
+      // L'avvio lo fa dash.js da solo (terzo parametro di initialize = autoplay).
+      dashInst = dashjs.MediaPlayer().create();
+      dashInst.updateSettings({ streaming:{ retryAttempts:{MPD:2}, buffer:{ bufferTimeAtTopQuality:20, bufferToKeep:20 } } });
+      dashInst.on(dashjs.MediaPlayer.events.ERROR, (e)=>fail('dash.js: '+(e && e.error && (e.error.message||e.error.code||JSON.stringify(e.error)))));
+      dashInst.on(dashjs.MediaPlayer.events.CAN_PLAY, ready);
+      dashInst.initialize(video, url, true);
+    } else if(url.includes('.m3u8') || isRai){
+      // isRai: l'indirizzo del relinker non contiene ".m3u8" nel testo, ma il
+      // contenuto finale è HLS e va letto con hls.js.
+      if(window.Hls && Hls.isSupported()){
+        // backBufferLength: di default hls.js non butta mai via il video già
+        // visto; su una chiavetta TV la memoria finisce e il player si pianta.
+        hlsInst = new Hls({ backBufferLength: 30, maxBufferLength: 30, maxMaxBufferLength: 60 });
+        let netRetries = 0, mediaRetries = 0;
+        hlsInst.on(Hls.Events.ERROR,(ev,data)=>{
+          if(!data.fatal || !alive()) return;
+          if(data.type === Hls.ErrorTypes.NETWORK_ERROR && started && netRetries++ < 3){ dbg('hls rete, riprovo  '+tag); hlsInst.startLoad(); return; }
+          if(data.type === Hls.ErrorTypes.MEDIA_ERROR && mediaRetries++ < 2){ dbg('hls media, recupero  '+tag); hlsInst.recoverMediaError(); return; }
+          fail('hls.js: '+data.type+' / '+data.details);
+        });
+        hlsInst.on(Hls.Events.MANIFEST_PARSED, ()=>{ ready(); playNow(); });
+        hlsInst.on(Hls.Events.FRAG_BUFFERED, ()=>{ netRetries = 0; });
+        hlsInst.loadSource(url);
+        hlsInst.attachMedia(video);
+      } else if(video.canPlayType('application/vnd.apple.mpegurl')){
+        video.src = url;
+        video.addEventListener('loadedmetadata', ()=>{ ready(); playNow(); }, {once:true});
+        video.addEventListener('error', ()=>fail('video: '+mediaErrName(video.error && video.error.code)), {once:true});
+      } else fail('HLS non supportato da questo browser');
+    } else {
+      video.src = url;
+      video.addEventListener('loadedmetadata', ()=>{ ready(); playNow(); }, {once:true});
+      video.addEventListener('error', ()=>fail('video: '+mediaErrName(video.error && video.error.code)), {once:true});
+    }
+  }catch(e){ fail('eccezione: '+e.message); }
+}
+function setDead(ch, isDead){
+  if(isDead === dead.has(ch.url)) return;
+  if(isDead) dead.add(ch.url); else dead.delete(ch.url);
+  saveDead();
+  forCards(ch, el=>{ el.classList.toggle('dead', isDead); el.querySelector('.tag').textContent = isDead ? 'NON DISP.' : ''; });
+}
+
+// ==================== FILE DI CANALI (stile Netflix) ====================
+function buildLanes(){
+  const out = [];
+  const fav = channels.filter(c=>favs.has(c.url));
+  if(fav.length) out.push({title:'I tuoi preferiti', items:fav});
+  const rec = recents.map(u=>channels.find(c=>c.url===u)).filter(Boolean);
+  if(rec.length) out.push({title:'Visti di recente', items:rec});
+  const groups = [...new Set(channels.map(c=>c.group))].sort((a,b)=>{
+    const ia=GROUP_ORDER.indexOf(a), ib=GROUP_ORDER.indexOf(b);
+    return (ia<0?99:ia)-(ib<0?99:ib);
+  });
+  groups.forEach(g=>out.push({title:g, items:channels.filter(c=>c.group===g)}));
+  out.push({title:'Tutti i canali', items:channels});
+  return out;
+}
+function hueOf(ch){
+  if(ch.group in GROUP_HUE) return GROUP_HUE[ch.group];
+  let h=0; for(const c of ch.group) h=(h*31+c.charCodeAt(0))%360; return h;
+}
+function makeCard(ch, li, ci){
+  const el = document.createElement('div');
+  el.className = 'card' + (dead.has(ch.url)?' dead':'') + (current&&current.url===ch.url?' playing':'');
+  el.style.setProperty('--h', hueOf(ch));
+  el.innerHTML = `
+    <div class="thumb">
+      <img src="${esc(ch.logo)}" alt="" loading="lazy" onerror="this.style.display='none'">
+      <span class="num">${ch.number}</span>
+      <span class="fav">${favs.has(ch.url)?'★':''}</span>
+      <span class="tag">${dead.has(ch.url)?'NON DISP.':''}</span>
+      <div class="pbar"><i></i></div>
+    </div>
+    <div class="cap"><div class="cn">${esc(ch.name)}</div><div class="cp"></div></div>`;
+  el._ch = ch;
+  el.onclick = ()=>{ if(laneIdx===li && colIdx===ci) playFull(ch); else setFocus(li, ci); };
+  updateCardEpg(el);
+  return el;
+}
+function updateCardEpg(el){
+  const [cur] = nowNext(epgOf(el._ch));
+  el.querySelector('.cp').textContent = cur ? cur.title : '';
+  el.querySelector('.pbar').style.display = cur ? '' : 'none';
+  el.querySelector('.pbar > i').style.width = pct(cur)+'%';
+}
+function forCards(ch, fn){ lanes.forEach(l=>l.cards.forEach(el=>{ if(el._ch.url===ch.url) fn(el); })); }
+function renderLanes(){
+  const keep = lanes[laneIdx] ? {title:lanes[laneIdx].title, url:(lanes[laneIdx].items[colIdx]||{}).url} : null;
+  lanes = buildLanes();
+  const root = document.getElementById('rows');
+  root.innerHTML = '';
+  lanes.forEach((lane, li)=>{
+    const sec = document.createElement('section');
+    sec.className = 'lane';
+    sec.innerHTML = `<h2>${esc(lane.title)}</h2>`;
+    const track = document.createElement('div');
+    track.className = 'track';
+    lane.cards = lane.items.map((ch, ci)=>{ const el = makeCard(ch, li, ci); track.appendChild(el); return el; });
+    sec.appendChild(track);
+    lane.el = sec; lane.track = track;
+    root.appendChild(sec);
+  });
+  let li = 0, ci = 0;
+  if(keep){
+    const l = lanes.findIndex(x=>x.title===keep.title);
+    if(l>=0){ li = l; ci = Math.max(0, lanes[l].items.findIndex(c=>c.url===keep.url)); }
+  }
+  setFocus(li, ci, {preview:false, instant:true});
+}
+function setFocus(li, ci, opt={}){
+  li = Math.max(0, Math.min(li, lanes.length-1));
+  const lane = lanes[li]; if(!lane) return;
+  ci = Math.max(0, Math.min(ci, lane.items.length-1));
+  const old = lanes[laneIdx];
+  if(old){ old.el.classList.remove('active'); if(old.cards[colIdx]) old.cards[colIdx].classList.remove('focus'); }
+  laneIdx = li; colIdx = ci;
+  lane.el.classList.add('active');
+  const card = lane.cards[ci];
+  card.classList.add('focus');
+  // La fila attiva sale in cima; la scheda attiva si allinea a sinistra.
+  const behavior = opt.instant ? 'auto' : 'smooth';
+  document.getElementById('rows').scrollTo({top: lane.el.offsetTop, behavior});
+  lane.track.scrollTo({left: Math.max(0, card.offsetLeft - lane.track.clientWidth*0.04), behavior});
+  const ch = lane.items[ci];
+  renderHero(ch);
+  // Anteprima automatica nel riquadro grande, dopo una breve pausa: se si
+  // scorre veloce non si aprono decine di flussi uno dopo l'altro.
+  clearTimeout(previewTimer);
+  if(opt.preview !== false && (!current || current.url !== ch.url)){
+    previewTimer = setTimeout(()=>{ if(!fullscreen) selectChannel(ch); }, 800);
+  }
+}
+function focusedChannel(){ const l = lanes[laneIdx]; return l ? l.items[colIdx] : null; }
+function focusChannel(ch, opt){
+  let li = laneIdx, ci = lanes[li] ? lanes[li].items.findIndex(c=>c.url===ch.url) : -1;
+  if(ci < 0){ li = lanes.findIndex(l=>l.title===ch.group); ci = li>=0 ? lanes[li].items.findIndex(c=>c.url===ch.url) : -1; }
+  if(ci < 0){ li = lanes.length-1; ci = lanes[li].items.findIndex(c=>c.url===ch.url); }
+  setFocus(li, ci, opt);
+}
+
+// ==================== HERO (riquadro grande) ====================
+function renderHero(ch){
+  const box = document.getElementById('heroInfo');
+  if(!ch){ box.innerHTML=''; return; }
+  const [cur,nxt] = nowNext(epgOf(ch));
+  let html = `<div class="chrow"><img class="chlogo" src="${esc(ch.logo)}" alt="" onerror="this.style.display='none'">
+    <div><span class="live">IN DIRETTA</span><div class="chname" style="margin-top:6px"><span class="chnum">${ch.number}</span>${esc(ch.name)}${favs.has(ch.url)?' <span style="color:var(--gold)">★</span>':''}</div></div></div>`;
+  if(cur){
+    html += `<div class="title">${esc(cur.title||ch.name)}</div>
+      <div class="meta"><span>${hm(cur.start)} – ${hm(cur.stop)}</span><div class="pbar"><i style="width:${pct(cur)}%"></i></div><span>ancora ${minsLeft(cur)} min</span></div>
+      ${cur.desc?`<div class="desc">${esc(cur.desc)}</div>`:''}`;
+  } else {
+    const msg = epgStatus==='loading' ? 'Caricamento guida programmi…'
+              : epgStatus==='failed' ? 'Guida programmi non disponibile.'
+              : 'Nessuna informazione sul programma in onda.';
+    html += `<div class="title">${esc(ch.name)}</div><div class="desc">${msg}</div>`;
+  }
+  if(nxt) html += `<div class="next"><b>DOPO</b>${hm(nxt.start)} · ${esc(nxt.title)}</div>`;
+  box.innerHTML = html;
+}
+
+// ==================== ANTEPRIMA E SCHERMO INTERO ====================
+function show(id, on, how='flex'){ document.getElementById(id).style.display = on ? how : 'none'; }
+function setCurrent(ch){
+  if(current) forCards(current, el=>el.classList.remove('playing'));
+  current = ch;
+  forCards(ch, el=>el.classList.add('playing'));
+  localStorage.setItem('iptv_last', ch.url);
+}
+function selectChannel(ch){
+  setCurrent(ch);
+  if(fullscreen) return; // a schermo intero il flusso lo avvia enterFullscreen
+  show('heroErr', false);
+  attachStream(document.getElementById('previewVideo'), ch, {
+    onErr:  ()=>{ setDead(ch, true); show('heroSpin', false); show('heroErr', true); },
+    onWait: ()=>{ show('heroSpin', true); },
+    onReady:()=>{ setDead(ch, false); show('heroSpin', false); },
+  });
+}
+function playFull(ch){
+  clearTimeout(previewTimer);
+  if(current && current.url !== ch.url) lastChannel = current;
+  setCurrent(ch);
+  enterFullscreen();
+}
+function addRecent(ch){
+  recents = [ch.url, ...recents.filter(u=>u!==ch.url)].slice(0, 12);
+  localStorage.setItem('iptv_recents', JSON.stringify(recents));
+  lanesDirty = true;
+}
+function enterFullscreen(){
+  if(!current) return;
+  const ch = current;
+  fullscreen = true;
+  addRecent(ch);
+  document.getElementById('fs').classList.add('show');
+  show('fsErr', false);
+  attachStream(document.getElementById('fsVideo'), ch, {
+    onErr:  ()=>{ setDead(ch, true); show('fsSpin', false); show('fsErr', true); },
+    onWait: ()=>{ show('fsSpin', true); },
+    onReady:()=>{ setDead(ch, false); show('fsSpin', false); },
+  });
+  showFsInfo();
+}
+function exitFullscreen(){
+  fullscreen = false;
+  document.getElementById('fs').classList.remove('show');
+  stopPlayers();
+  document.getElementById('fsVideo').removeAttribute('src');
+  if(lanesDirty){ lanesDirty = false; renderLanes(); }
+  focusChannel(current, {preview:false, instant:true});
+  selectChannel(current); // riattacca l'anteprima
+}
+let fsInfoTimer=null;
+function showFsInfo(){
+  const [cur,nxt] = nowNext(epgOf(current));
+  document.getElementById('fsInfoLogo').src = current.logo;
+  document.getElementById('fsInfoName').textContent = current.number+'  ·  '+current.name+(favs.has(current.url)?'  ★':'');
+  document.getElementById('fsInfoProg').textContent = cur ? cur.title : current.name;
+  document.getElementById('fsInfoTime').textContent = cur ? hm(cur.start)+' – '+hm(cur.stop)+'  ·  ancora '+minsLeft(cur)+' min' : '';
+  document.getElementById('fsInfoBar').style.width = pct(cur)+'%';
+  document.getElementById('fsInfoNext').textContent = nxt ? 'DOPO  '+hm(nxt.start)+' · '+nxt.title : '';
+  const el = document.getElementById('fsInfo');
+  el.classList.add('show');
+  clearTimeout(fsInfoTimer);
+  fsInfoTimer = setTimeout(()=>el.classList.remove('show'), 5000);
+}
+function zap(dir){
+  let idx = channels.findIndex(c=>c.url===current.url);
+  for(let i=0;i<channels.length;i++){
+    idx = (idx+dir+channels.length)%channels.length;
+    if(!dead.has(channels[idx].url)){ playFull(channels[idx]); return; }
+  }
+}
+let lastChannel = null;
+function toggleFav(ch){
+  if(favs.has(ch.url)) favs.delete(ch.url); else favs.add(ch.url);
+  saveFavs();
+  forCards(ch, el=>{ el.querySelector('.fav').textContent = favs.has(ch.url) ? '★' : ''; });
+  if(fullscreen){ lanesDirty = true; showFsInfo(); }
+  else { renderLanes(); renderHero(focusedChannel()); }
+}
+
+// ==================== TASTIERA (telecomando) ====================
+// OK/Invio: pressione breve = guarda a schermo intero, lunga = preferito.
+let selectTimer = null, longFired = false, keyIsDown = false;
+function onShortPress(){
+  if(fullscreen){ showFsInfo(); return; }
+  const ch = focusedChannel();
+  if(ch) playFull(ch);
+}
+function onLongPress(){
+  const ch = fullscreen ? current : focusedChannel();
+  if(ch) toggleFav(ch);
+}
+document.addEventListener('keydown', (e)=>{
+  if(document.getElementById('loadScreen').style.display!=='none') return;
+  if(e.key==='Enter' || e.key===' '){
+    e.preventDefault();
+    if(e.repeat) return;
+    keyIsDown = true; longFired = false;
+    selectTimer = setTimeout(()=>{ if(keyIsDown){ longFired = true; onLongPress(); } }, 550);
+    return;
+  }
+  if(fullscreen){
+    if(e.repeat) return;
+    if(e.key==='ArrowUp' || e.key==='ArrowDown'){ e.preventDefault(); zap(e.key==='ArrowUp'?1:-1); }
+    else if(e.key==='ArrowLeft'){ if(lastChannel) playFull(lastChannel); }
+    else if(e.key==='ArrowRight'){ showFsInfo(); }
+    else if(e.key==='Escape' || e.key==='Backspace' || e.key==='GoBack'){ e.preventDefault(); exitFullscreen(); }
+    else if(/^[0-9]$/.test(e.key)){ bufferNumber(e.key, (n)=>{ const ch=channels.find(c=>c.number===n); if(ch) playFull(ch); }); }
+    return;
+  }
+  if(e.key==='ArrowDown'){ e.preventDefault(); setFocus(laneIdx+1, colIdx); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); setFocus(laneIdx-1, colIdx); }
+  else if(e.key==='ArrowLeft'){ e.preventDefault(); setFocus(laneIdx, colIdx-1); }
+  else if(e.key==='ArrowRight'){ e.preventDefault(); setFocus(laneIdx, colIdx+1); }
+  else if(/^[0-9]$/.test(e.key)){ bufferNumber(e.key, (n)=>{ const ch=channels.find(c=>c.number===n); if(ch) focusChannel(ch); }); }
+});
+document.addEventListener('keyup', (e)=>{
+  if(e.key!=='Enter' && e.key!==' ') return;
+  if(!keyIsDown) return;
+  keyIsDown = false;
+  clearTimeout(selectTimer);
+  if(!longFired) onShortPress();
+});
+function bufferNumber(d, cb){
+  numBuf = (numBuf+d).slice(-4);
+  const el = document.getElementById('fsNumBuf');
+  el.textContent = numBuf;
+  el.style.display = fullscreen ? 'block':'none';
+  clearTimeout(numTimer);
+  numTimer = setTimeout(()=>{ cb(parseInt(numBuf,10)); numBuf=''; el.style.display='none'; }, 1200);
+}
+document.getElementById('hero').addEventListener('click', (e)=>{
+  if(e.target.closest('#installBtn')) return;
+  const ch = focusedChannel(); if(ch) playFull(ch);
+});
+document.getElementById('fs').addEventListener('click', showFsInfo);
+document.getElementById('fs').addEventListener('dblclick', exitFullscreen);
+
+// ==================== OROLOGIO E AGGIORNAMENTI ====================
+function tickClock(){ document.getElementById('clock').textContent = new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}); }
+setInterval(tickClock, 1000); tickClock();
+// Ogni minuto: aggiorna "in onda ora" e le barre di avanzamento.
+setInterval(()=>{
+  if(!channels.length || epgStatus!=='ok') return;
+  lanes.forEach(l=>l.cards.forEach(updateCardEpg));
+  renderHero(focusedChannel());
+}, 60000);
+// Ogni 3 ore la guida viene riscaricata (l'app su una TV resta accesa a lungo).
+setInterval(()=>{ loadEpg().then(applyEpg); }, 3*3600e3);
+function applyEpg(res){
+  if(res){ epg = res; epgStatus = 'ok'; } else if(epgStatus==='loading') epgStatus = 'failed';
+  lanes.forEach(l=>l.cards.forEach(updateCardEpg));
+  renderHero(focusedChannel());
+  if(fullscreen) showFsInfo();
+}
+
+// ==================== INSTALLAZIONE PWA ====================
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault(); deferredInstall=e;
+  document.getElementById('installBtn').style.display='inline-block';
+});
+document.getElementById('installBtn').onclick = ()=>{ if(deferredInstall) deferredInstall.prompt(); };
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+}
+
+// ==================== AVVIO ====================
+async function boot(){
+  show('retryBtn', false); show('loadErr', false); show('loadSpin', true, 'block');
+  dbg('Origine pagina: ' + (location.origin==='null' ? 'null (file:// — aperta col doppio clic)' : location.origin));
+  try{
+    channels = await loadChannels();
+    dbg('Canali pronti  →  '+channels.length);
+    if(channels.length===0) throw new Error('Playlist vuota');
+    document.getElementById('loadScreen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    const last = channels.find(c=>c.url===localStorage.getItem('iptv_last')) || channels[0];
+    renderLanes();
+    focusChannel(last, {preview:false, instant:true});
+    selectChannel(last);
+    loadEpg().then(applyEpg);
+  }catch(e){
+    dbg('Canali KO  →  '+e.message);
+    show('loadSpin', false);
+    document.getElementById('loadErr').textContent = 'Impossibile caricare i canali ('+e.message+')';
+    show('loadErr', true, 'block');
+    show('retryBtn', true, 'inline-block');
+  }
+}
+document.getElementById('retryBtn').onclick = boot;
+document.getElementById('dbgBtn').onclick = ()=>{
+  const p = document.getElementById('dbgPanel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')) renderDbg();
+};
+document.getElementById('dbgClose').onclick = ()=>document.getElementById('dbgPanel').classList.remove('open');
+document.getElementById('dbgCopy').onclick = ()=>{
+  navigator.clipboard.writeText(debugLog.join('\n')).then(
+    ()=>{ const b=document.getElementById('dbgCopy'); b.textContent='Copiato!'; setTimeout(()=>b.textContent='Copia',1500); },
+    ()=>{ alert('Copia manualmente il testo del pannello.'); }
+  );
+};
+boot();
+</script>
+</body>
+</html>

@@ -1,7 +1,16 @@
 name: Build APK
 on:
   push:
-  workflow_dispatch:
+    # Ricompila solo se cambia l'app Android, non a ogni modifica del sito.
+    paths:
+      - 'app/**'
+      - '*.gradle.kts'
+      - 'gradle.properties'
+      - '.github/workflows/build.yml'
+  workflow_dispatch:         # pulsante "Run workflow" per crearlo quando vuoi
+
+permissions:
+  contents: write            # serve per pubblicare l'APK nella pagina "Releases"
 
 jobs:
   build:
@@ -16,7 +25,13 @@ jobs:
         with:
           gradle-version: 8.9
       - run: gradle assembleDebug --no-daemon
-      - uses: actions/upload-artifact@v4
+      - run: mv app/build/outputs/apk/debug/app-debug.apk SpijTV.apk
+
+      # L'APK finisce sempre allo stesso indirizzo, scaricabile anche dalla TV:
+      # https://github.com/ciaociaofjwoqWC/MioIPTV/releases/latest/download/SpijTV.apk
+      - uses: softprops/action-gh-release@v2
         with:
-          name: MioIPTV-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          tag_name: apk
+          name: Spij TV (ultima versione)
+          make_latest: true
+          files: SpijTV.apk

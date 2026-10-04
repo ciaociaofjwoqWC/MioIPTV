@@ -106,7 +106,6 @@
   #fs video{width:100%; height:100%; object-fit:contain; background:#000}
   #fsSpin{position:absolute; inset:0; display:none; align-items:center; justify-content:center}
   #fsErr{position:absolute; inset:0; display:none; flex-direction:column; gap:8px; align-items:center; justify-content:center; text-align:center; font-size:20px; font-weight:700; background:#000c}
-  #fsErr span{font-size:14px; color:var(--muted); font-weight:400}
   #fsNumBuf{position:absolute; top:5vh; right:4vw; background:#000c; padding:10px 22px; border-radius:8px; font-size:40px; font-weight:900; display:none; border-left:4px solid var(--accent)}
   #fsInfo{position:absolute; left:0; right:0; bottom:0; padding:12vh var(--pad) 6vh; display:flex; align-items:flex-end; gap:22px;
     background:linear-gradient(0deg, #000e 0%, #000a 50%, transparent 100%); opacity:0; transition:opacity .3s; pointer-events:none}
@@ -118,17 +117,6 @@
   #fsInfo .row2{display:flex; align-items:center; gap:14px; margin-top:8px; font-size:clamp(12px,1vw,16px); color:#ccc}
   #fsInfo .row2 .pbar{flex:0 0 clamp(120px,22vw,420px)}
   #fsInfo .pnext{margin-top:6px; font-size:clamp(11px,.95vw,15px); color:var(--muted)}
-  #fsInfo .hint{font-size:12px; color:var(--dim); text-align:right; white-space:nowrap}
-
-  /* ---------- registro diagnostico ---------- */
-  #dbgBtn{position:fixed; right:10px; bottom:10px; z-index:40; width:30px; height:30px; border-radius:50%;
-    background:#ffffff14; border:none; color:#fff; font-size:14px; cursor:pointer; opacity:.5}
-  #dbgPanel{position:fixed; right:10px; bottom:48px; z-index:40; width:min(560px,90vw); max-height:60vh;
-    background:#000000ee; border-radius:10px; padding:10px; display:none; flex-direction:column; gap:6px}
-  #dbgPanel.open{display:flex}
-  #dbgPanel .bar{display:flex; gap:8px; align-items:center}
-  #dbgPanel button{background:var(--accent); color:#fff; border:none; border-radius:4px; padding:4px 10px; font-size:12px; cursor:pointer}
-  #dbgList{overflow-y:auto; font-family:monospace; font-size:11px; white-space:pre-wrap; color:#a3a3ad; line-height:1.5}
 
   @media (max-width:700px){
     #hero{height:48vh}
@@ -165,21 +153,10 @@
   <div id="rows"></div>
 </div>
 
-<button id="dbgBtn" title="Registro diagnostico">🐞</button>
-<div id="dbgPanel">
-  <div class="bar">
-    <b style="font-size:13px">Registro diagnostico</b>
-    <span style="flex:1"></span>
-    <button id="dbgCopy">Copia</button>
-    <button id="dbgClose">Chiudi</button>
-  </div>
-  <div id="dbgList"></div>
-</div>
-
 <div id="fs">
   <video id="fsVideo" playsinline></video>
   <div id="fsSpin"><div class="spinner"></div></div>
-  <div id="fsErr">Canale non disponibile<span>▲▼ cambia canale · Indietro torna alla guida</span></div>
+  <div id="fsErr">Canale non disponibile</div>
   <div id="fsNumBuf"></div>
   <div id="fsInfo">
     <img id="fsInfoLogo" src="" alt="">
@@ -190,7 +167,6 @@
       <div class="row2"><span id="fsInfoTime"></span><div class="pbar"><i id="fsInfoBar" style="width:0%"></i></div></div>
       <div class="pnext" id="fsInfoNext"></div>
     </div>
-    <div class="hint">▲▼ canale · ◀ precedente<br>tieni premuto OK = preferito</div>
   </div>
 </div>
 
@@ -220,14 +196,16 @@ const GROUP_HUE = {Rai:215, Mediaset:200, Discovery:265, Sky:190, Altro:340, Rad
 function loadJSON(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch(e){ return d; } }
 let channels = [];
 let favs = new Set(loadJSON('iptv_favs', []));
-// La versione precedente, per un bug, poteva segnare come "morti" per sbaglio
-// canali che invece funzionavano. Alla prima apertura di questa versione
-// l'elenco viene svuotato una volta, così si riparte puliti.
-if(localStorage.getItem('iptv_dead_v') !== '3'){
-  localStorage.setItem('iptv_dead', '[]');
-  localStorage.setItem('iptv_dead_v', '3');
-}
-let dead = new Set(loadJSON('iptv_dead', []));
+// Canali che non sono partiti con nessuna sorgente: url -> quando è successo.
+// Dopo 12 ore si dimenticano, così un canale tornato a funzionare non resta
+// nascosto per sempre nella fila "Non disponibili".
+const DEAD_TTL = 12*3600e3;
+let deadAt = loadJSON('iptv_dead2', {});
+for(const u in deadAt) if(Date.now()-deadAt[u] > DEAD_TTL) delete deadAt[u];
+const dead = { has: u => u in deadAt };
+// Dentro l'app Android esiste window.SpijNative: fa le cose che un browser non
+// può fare (es. aprire i link Rai). Nel browser normale non c'è.
+const NATIVE = window.SpijNative || null;
 let recents = loadJSON('iptv_recents', []);   // url dei canali guardati, il più recente per primo
 let altMap = loadJSON('iptv_alt', {});        // url canale -> indice della sorgente che ha funzionato
 let epg = {};              // chiave canale -> [{start,stop,title,desc}]
@@ -243,7 +221,7 @@ let previewTimer = null;
 let numBuf = '', numTimer = null;
 
 function saveFavs(){ localStorage.setItem('iptv_favs', JSON.stringify([...favs])); }
-function saveDead(){ localStorage.setItem('iptv_dead', JSON.stringify([...dead])); }
+function saveDead(){ localStorage.setItem('iptv_dead2', JSON.stringify(deadAt)); }
 function norm(s){
   let t = (s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
   if(t.length>4 && t.endsWith('it')) t = t.slice(0,-2);
@@ -251,16 +229,8 @@ function norm(s){
 }
 function esc(s){ return String(s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]); }
 
-// ==================== LOG DIAGNOSTICO ====================
-const debugLog = [];
-function dbg(msg){
-  const line = new Date().toLocaleTimeString('it-IT') + '  ' + msg;
-  debugLog.unshift(line);
-  if(debugLog.length > 200) debugLog.length = 200;
-  console.log(msg);
-  if(document.getElementById('dbgPanel').classList.contains('open')) renderDbg();
-}
-function renderDbg(){ document.getElementById('dbgList').textContent = debugLog.join('\n'); }
+// Registro diagnostico: solo nella console degli strumenti per sviluppatori.
+function dbg(msg){ console.log('[SpijTV] '+msg); }
 
 // ==================== CARICAMENTO CANALI ====================
 function parseM3U(text){
@@ -352,17 +322,16 @@ function stopPlayers(){
 function mediaErrName(code){
   return ({1:'interrotto',2:'errore di rete',3:'errore di decodifica',4:'formato non supportato'})[code] || ('codice '+code);
 }
-// I link Rai passano da un "relinker" che non dà il permesso CORS: da un
-// browser non si possono aprire (nell'app Android invece sì). RAI_PROXY_URL,
-// se compilato, punta a un piccolo server che fa da tramite.
-const RAI_PROXY_URL = ""; // es. "https://tuo-nome.workers.dev/rai"
+// I link Rai passano da un "relinker" che rimanda al video vero, ma non dà ai
+// browser il permesso (CORS) di seguire quel rimando. Nell'app Android lo
+// segue l'app (SpijNative.resolve) e restituisce l'indirizzo finale del
+// video, che invece si può aprire. Nel browser il link resta così com'è e
+// fallisce: si passa alla sorgente di riserva, se c'è.
 function fixRaiUrl(url){
-  if(!/rai\.it\/relinker/.test(url)) return url;
-  if(!RAI_PROXY_URL) return url.replace(/^http:\/\//, 'https://'); // http da pagina https = bloccato
-  const cont = (url.match(/[?&]cont=([^&]*)/)||[])[1];
-  const output = (url.match(/[?&]output=([^&]*)/)||[])[1] || '7';
-  if(!cont) return url;
-  return RAI_PROXY_URL + '?cont=' + encodeURIComponent(cont) + '&output=' + encodeURIComponent(output);
+  if(NATIVE){
+    try{ return NATIVE.resolve(url) || ''; }catch(e){ return ''; }
+  }
+  return url.replace(/^http:\/\//, 'https://'); // http da pagina https = bloccato
 }
 // Ogni chiamata ha un numero di "generazione": se nel frattempo si è passati a
 // un altro canale, gli eventi tardivi di questa vengono ignorati.
@@ -380,6 +349,12 @@ function attachStream(video, ch, cb, st={restarts:0, alt:null, tried:0}){
   const raw = urls[alt];
   const isRai = /rai\.it\/relinker/.test(raw);
   const url = isRai ? fixRaiUrl(raw) : raw;
+  if(!url){ // l'app non è riuscita ad aprire il link Rai
+    dbg('KO  '+ch.name+'  →  relinker Rai non risponde');
+    if(st.tried+1 < urls.length) attachStream(video, ch, cb, {restarts:0, alt:(alt+1)%urls.length, tried:st.tried+1});
+    else cb.onErr();
+    return;
+  }
   const tag = ch.name + (urls.length>1 ? ' ['+(alt+1)+'/'+urls.length+']' : '');
   let started = false;
   const watchdog = setTimeout(() => { if(alive()){ fail('nessuna risposta in 12 s'); } }, 12000);
@@ -464,8 +439,11 @@ function attachStream(video, ch, cb, st={restarts:0, alt:null, tried:0}){
 }
 function setDead(ch, isDead){
   if(isDead === dead.has(ch.url)) return;
-  if(isDead) dead.add(ch.url); else dead.delete(ch.url);
+  if(isDead) deadAt[ch.url] = Date.now(); else delete deadAt[ch.url];
   saveDead();
+  // La scheda resta dov'è (spostarla mentre si scorre farebbe saltare il
+  // cursore): cambia fila alla prossima ricostruzione delle file.
+  lanesDirty = true;
   forCards(ch, el=>{ el.classList.toggle('dead', isDead); el.querySelector('.tag').textContent = isDead ? 'NON DISP.' : ''; });
 }
 
@@ -480,8 +458,16 @@ function buildLanes(){
     const ia=GROUP_ORDER.indexOf(a), ib=GROUP_ORDER.indexOf(b);
     return (ia<0?99:ia)-(ib<0?99:ib);
   });
-  groups.forEach(g=>out.push({title:g, items:channels.filter(c=>c.group===g)}));
-  out.push({title:'Tutti i canali', items:channels});
+  // I canali che non partono con nessuna sorgente finiscono tutti in fondo,
+  // nella fila "Non disponibili", invece di intralciare nelle altre.
+  const alive = channels.filter(c=>!dead.has(c.url));
+  groups.forEach(g=>{
+    const items = alive.filter(c=>c.group===g);
+    if(items.length) out.push({title:g, items});
+  });
+  out.push({title:'Tutti i canali', items:alive});
+  const off = channels.filter(c=>dead.has(c.url));
+  if(off.length) out.push({title:'Non disponibili', items:off});
   return out;
 }
 function hueOf(ch){
@@ -781,17 +767,16 @@ async function boot(){
   }
 }
 document.getElementById('retryBtn').onclick = boot;
-document.getElementById('dbgBtn').onclick = ()=>{
-  const p = document.getElementById('dbgPanel');
-  p.classList.toggle('open');
-  if(p.classList.contains('open')) renderDbg();
-};
-document.getElementById('dbgClose').onclick = ()=>document.getElementById('dbgPanel').classList.remove('open');
-document.getElementById('dbgCopy').onclick = ()=>{
-  navigator.clipboard.writeText(debugLog.join('\n')).then(
-    ()=>{ const b=document.getElementById('dbgCopy'); b.textContent='Copiato!'; setTimeout(()=>b.textContent='Copia',1500); },
-    ()=>{ alert('Copia manualmente il testo del pannello.'); }
-  );
+
+// ==================== COLLEGAMENTO CON L'APP ANDROID ====================
+// Le chiama MainActivity.kt.
+// Tasto Indietro: true = gestito qui (chiuso lo schermo intero), false = l'app esce.
+window.spijBack = ()=>{ if(fullscreen){ exitFullscreen(); return true; } return false; };
+// Uscita dall'app col tasto Home: si ferma tutto; al ritorno riparte il canale.
+window.spijPause = ()=>{ clearTimeout(previewTimer); clearInterval(stallTimer); playGen++; stopPlayers(); };
+window.spijResume = ()=>{
+  if(!current) return;
+  if(fullscreen) enterFullscreen(); else selectChannel(current);
 };
 boot();
 </script>

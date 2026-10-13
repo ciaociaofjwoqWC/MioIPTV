@@ -598,7 +598,8 @@
    "urls": [
     "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747011&output=7&forceUserAgent=raiplayappletv",
     "https://d3k8wzt41aflvx.cloudfront.net/RAIScuola/Live.m3u8",
-    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747011&output=7&forceUserAgent=rainet/4.0.5"
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747011&output=7&forceUserAgent=rainet/4.0.5",
+    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747011"
    ]
   },
   {

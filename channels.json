@@ -428,7 +428,7 @@
    "urls": [
     "http://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746953&output=7&forceUserAgent=raiplayappletv",
     "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746953&output=7&forceUserAgent=rainet/4.0.5",
-    "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746953"
+    "http://5.180.164.197:8080/RAIGULP/index.m3u8"
    ]
   },
   {

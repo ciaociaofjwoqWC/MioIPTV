@@ -18,6 +18,14 @@ EXTRA = [
 OUT = Path(__file__).resolve().parent.parent / "channels.json"
 # Canali che le playlist chiamano in modo troppo diverso per abbinarli da soli.
 KEY_ALIASES = {"rtvsanmarino": "sanmarinortv"}
+# Sorgenti trovate nella lista di Zappr (github.com/ZapprTV/channels), provate prima delle altre.
+BEST_URLS = {
+    "la7d": ["https://d15umi5iaezxgx.cloudfront.net/HBBTV/LA7D/DASH/Live.mpd"],
+    "super": ["https://495c5a85d9074f29acffeaea9e0215eb.msvdn.net/super/super_main/super_main_hbbtv/playlist_dvr.m3u8"],
+    "almatv": ["https://5f11919dca3bd.streamlock.net/almatv/_definst_/almatv/playlist.m3u8"],
+}
+# LA7d ha cambiato nome.
+RENAME = {"LA7d": "LA7 Cinema"}
 
 
 def norm(s):
@@ -92,9 +100,12 @@ def main():
                     urls.append(u)
         # Prima i link https: da una pagina https quelli http vengono bloccati.
         urls = urls[:1] + sorted(urls[1:], key=lambda u: not u.startswith("https://"))
+        # urls[0] resta il primo: identifica il canale nei preferiti e negli ultimi visti.
+        best = [u for k in keys_of(c) for u in BEST_URLS.get(k, [])]
+        urls = urls[:1] + best + [u for u in urls[1:] if u not in best]
         n_alt += len(urls) - 1
         channels.append({
-            "name": c["name"], "logo": c["logo"], "group": c["group"], "id": c["id"],
+            "name": RENAME.get(c["name"], c["name"]), "logo": c["logo"], "group": c["group"], "id": c["id"],
             "number": c["number"], "ua": c["ua"], "ref": c["ref"], "urls": urls,
         })
 

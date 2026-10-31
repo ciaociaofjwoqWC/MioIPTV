@@ -11,10 +11,18 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 PLAYLIST_URL = "https://raw.githubusercontent.com/Tundrak/IPTV-Italia/main/iptvitaplus.m3u"
-EPG_URLS = ["https://epgshare01.online/epgshare01/epg_ripper_IT1.xml.gz"]
+# In ordine di preferenza: un canale già trovato in una fonte non viene riletto dalle altre.
+EPG_URLS = [
+    "https://epgshare01.online/epgshare01/epg_ripper_IT1.xml.gz",
+    "https://iptv-epg.org/files/epg-it.xml",
+    "https://www.open-epg.com/files/italy2.xml",
+]
 OUT = Path(__file__).resolve().parent.parent / "epg.json"
 # Canali che nella guida hanno un nome troppo diverso da quello della playlist.
-ALIASES = {"20mediaset": "20", "twentyseven": "27twentyseven"}
+ALIASES = {
+    "20mediaset": "20", "twentyseven": "27twentyseven", "homegardentv": "hgtv",
+    "raisporthd": "raisport", "rtvsanmarino": "sanmarinortv", "rtl1025news": "rtl1025",
+}
 
 
 def norm(s):

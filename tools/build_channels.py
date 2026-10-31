@@ -16,6 +16,8 @@ EXTRA = [
     "https://iptv-org.github.io/iptv/countries/it.m3u",
 ]
 OUT = Path(__file__).resolve().parent.parent / "channels.json"
+# Canali che le playlist chiamano in modo troppo diverso per abbinarli da soli.
+KEY_ALIASES = {"rtvsanmarino": "sanmarinortv"}
 
 
 def norm(s):
@@ -37,6 +39,7 @@ def keys_of(c):
     name = clean_name(c["name"])
     ks = [norm(c["id"]), norm(name), norm(re.split(r"\s[-–]\s", name)[0])]
     ks += [re.sub(r"hd$", "", k) for k in ks]  # "Rai Sport + HD" -> raisport
+    ks += [KEY_ALIASES[k] for k in ks if k in KEY_ALIASES]
     return [k for k in dict.fromkeys(ks) if k]
 
 

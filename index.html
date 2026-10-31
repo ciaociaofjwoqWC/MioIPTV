@@ -53,6 +53,10 @@
   #heroErr b{color:#fff; font-size:18px}
   .topbar{position:absolute; top:0; left:0; right:0; display:flex; align-items:center; gap:18px; padding:2.4vh var(--pad); z-index:2}
   .topbar .clock{margin-left:auto; font-size:20px; font-weight:300; color:#ddd}
+  #gearBtn{width:clamp(36px,3.2vw,52px); height:clamp(36px,3.2vw,52px); padding:.55em; border:0; border-radius:50%; background:#ffffff24; cursor:pointer; transition:transform .18s, background .18s; display:grid; place-items:center}
+  #gearBtn svg{width:clamp(20px,1.8vw,30px); height:clamp(20px,1.8vw,30px); fill:#fff}
+  #gearBtn.focus{background:#fff; transform:scale(1.1)}
+  #gearBtn.focus svg{fill:#000}
   #installBtn{display:none; background:#ffffff22; color:#fff; border:none; border-radius:4px; padding:6px 12px; font-size:13px; cursor:pointer}
   #heroInfo{position:absolute; left:var(--pad); top:12vh; width:44%; z-index:2}
   #heroInfo .chrow{display:flex; align-items:center; gap:14px; margin-bottom:1.6vh}
@@ -166,6 +170,7 @@
       <div class="brand"><img src="logo.png" alt="">Spij<b>TV</b></div>
       <button id="installBtn">Installa app</button>
       <div class="clock" id="clock">--:--</div>
+      <button id="gearBtn" aria-label="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7 7 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.47.47 0 0 0-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.74 8.87a.47.47 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.47.47 0 0 0-.12-.61zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg></button>
     </div>
     <div id="heroInfo"></div>
   </div>
@@ -232,8 +237,6 @@ const dead = { has: u => u in deadAt };
 // può fare (es. aprire i link Rai). Nel browser normale non c'è.
 const NATIVE = window.SpijNative || null;
 let hiddenCh = new Set(loadJSON('iptv_hidden', [])); // canali tolti dalla lista nelle Impostazioni
-// La scheda che apre le Impostazioni: sta nelle file come un canale, ma non si riproduce.
-const SETTINGS_CARD = {url:'#impostazioni', name:'Gestisci canali', logo:'', group:'Impostazioni', number:'', keys:[], settings:true};
 let recents = loadJSON('iptv_recents', []);   // url dei canali guardati, il più recente per primo
 let altMap = loadJSON('iptv_alt', {});        // url canale -> indice della sorgente che ha funzionato
 let epg = {};              // chiave canale -> [{start,stop,title,desc}]
@@ -500,7 +503,6 @@ function buildLanes(){
   out.push({title:'Tutti i canali', items:alive});
   const off = shown.filter(c=>dead.has(c.url));
   if(off.length) out.push({title:'Non disponibili', items:off});
-  out.push({title:'Impostazioni', items:[SETTINGS_CARD]});
   return out;
 }
 function hueOf(ch){
@@ -521,7 +523,7 @@ function makeCard(ch, li, ci){
     </div>
     <div class="cap"><div class="cn">${esc(ch.name)}</div><div class="cp"></div></div>`;
   el._ch = ch;
-  el.onclick = ()=>{ if(laneIdx===li && colIdx===ci) activate(ch); else setFocus(li, ci); };
+  el.onclick = ()=>{ if(laneIdx===li && colIdx===ci) playFull(ch); else setFocus(li, ci); };
   updateCardEpg(el);
   return el;
 }
@@ -574,7 +576,7 @@ function setFocus(li, ci, opt={}){
   // Anteprima automatica nel riquadro grande, dopo una breve pausa: se si
   // scorre veloce non si aprono decine di flussi uno dopo l'altro.
   clearTimeout(previewTimer);
-  if(opt.preview !== false && !ch.settings && (!current || current.url !== ch.url)){
+  if(opt.preview !== false && (!current || current.url !== ch.url)){
     previewTimer = setTimeout(()=>{ if(!fullscreen) selectChannel(ch); }, 800);
   }
 }
@@ -590,10 +592,6 @@ function focusChannel(ch, opt){
 function renderHero(ch){
   const box = document.getElementById('heroInfo');
   if(!ch){ box.innerHTML=''; return; }
-  if(ch.settings){
-    box.innerHTML = `<div class="title">Gestisci canali</div><div class="desc">Scegli quali canali vedere nella lista. Premi OK per aprire.</div>`;
-    return;
-  }
   const [cur,nxt] = nowNext(epgOf(ch));
   let html = `<div class="chrow"><img class="chlogo" src="${esc(ch.logo)}" alt="" onerror="this.style.display='none'">
     <div><span class="live">IN DIRETTA</span><div class="chname" style="margin-top:6px"><span class="chnum">${ch.number}</span>${esc(ch.name)}${favs.has(ch.url)?' <span style="color:var(--gold)">★</span>':''}</div></div></div>`;
@@ -700,17 +698,25 @@ function toggleFav(ch){
 let selectTimer = null, longFired = false, keyIsDown = false;
 function onShortPress(){
   if(fullscreen){ showFsInfo(); return; }
+  if(gearOn){ openSettings(); return; }
   const ch = focusedChannel();
-  if(ch) activate(ch);
+  if(ch) playFull(ch);
 }
 function onLongPress(){
+  if(gearOn) return;
   const ch = fullscreen ? current : focusedChannel();
-  if(ch && !ch.settings) toggleFav(ch);
+  if(ch) toggleFav(ch);
 }
-function activate(ch){ if(ch.settings) openSettings(); else playFull(ch); }
 
 // ==================== IMPOSTAZIONI: QUALI CANALI MOSTRARE ====================
-let settingsOpen = false, stIdx = 0;
+let settingsOpen = false, stIdx = 0, gearOn = false;
+// La rotella in alto: si raggiunge con Su dalla prima fila, Giù torna ai canali.
+function setGear(on){
+  gearOn = on;
+  document.getElementById('gearBtn').classList.toggle('focus', on);
+  const card = lanes[laneIdx] && lanes[laneIdx].cards[colIdx];
+  if(card) card.classList.toggle('focus', !on);
+}
 function openSettings(){
   clearTimeout(previewTimer);
   settingsOpen = true;
@@ -741,7 +747,7 @@ function stToggle(){
 function closeSettings(){
   settingsOpen = false;
   document.getElementById('st').classList.remove('show');
-  if(lanesDirty){ lanesDirty = false; renderLanes(); }
+  if(lanesDirty){ lanesDirty = false; renderLanes(); setGear(gearOn); }
 }
 document.addEventListener('keydown', (e)=>{
   if(document.getElementById('loadScreen').style.display!=='none') return;
@@ -769,8 +775,13 @@ document.addEventListener('keydown', (e)=>{
     else if(/^[0-9]$/.test(e.key)){ bufferNumber(e.key, (n)=>{ const ch=channels.find(c=>c.number===n); if(ch) playFull(ch); }); }
     return;
   }
+  if(gearOn){
+    e.preventDefault();
+    if(e.key==='ArrowDown' || e.key==='Escape' || e.key==='Backspace' || e.key==='GoBack') setGear(false);
+    return;
+  }
   if(e.key==='ArrowDown'){ e.preventDefault(); setFocus(laneIdx+1, colIdx); }
-  else if(e.key==='ArrowUp'){ e.preventDefault(); setFocus(laneIdx-1, colIdx); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); if(laneIdx===0) setGear(true); else setFocus(laneIdx-1, colIdx); }
   else if(e.key==='ArrowLeft'){ e.preventDefault(); setFocus(laneIdx, colIdx-1); }
   else if(e.key==='ArrowRight'){ e.preventDefault(); setFocus(laneIdx, colIdx+1); }
   else if(/^[0-9]$/.test(e.key)){ bufferNumber(e.key, (n)=>{ const ch=channels.find(c=>c.number===n); if(ch) focusChannel(ch); }); }
@@ -791,9 +802,10 @@ function bufferNumber(d, cb){
   numTimer = setTimeout(()=>{ cb(parseInt(numBuf,10)); numBuf=''; el.style.display='none'; }, 1200);
 }
 document.getElementById('hero').addEventListener('click', (e)=>{
-  if(e.target.closest('#installBtn')) return;
-  const ch = focusedChannel(); if(ch) activate(ch);
+  if(e.target.closest('#installBtn, #gearBtn')) return;
+  const ch = focusedChannel(); if(ch) playFull(ch);
 });
+document.getElementById('gearBtn').onclick = openSettings;
 document.getElementById('fs').addEventListener('click', showFsInfo);
 document.getElementById('fs').addEventListener('dblclick', exitFullscreen);
 
@@ -857,6 +869,7 @@ document.getElementById('retryBtn').onclick = boot;
 window.spijBack = ()=>{
   if(settingsOpen){ closeSettings(); return true; }
   if(fullscreen){ exitFullscreen(); return true; }
+  if(gearOn){ setGear(false); return true; }
   return false;
 };
 // Uscita dall'app col tasto Home: si ferma tutto; al ritorno riparte il canale.

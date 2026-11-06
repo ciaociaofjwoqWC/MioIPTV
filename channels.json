@@ -944,7 +944,8 @@
    "ref": "",
    "urls": [
     "https://stream.radioseriea.com/50773f0d0070476a8612d9984c6059d8/index.m3u8",
-    "https://legaseriea-live-prd.cdn.netrw.it/out/v1/s-prd/ch-01-prd-s-v2/hls-ch-01-prd-s-hd/index%2Em3u8"
+    "https://legaseriea-live-prd.cdn.netrw.it/out/v1/s-prd/ch-01-prd-s-v2/hls-ch-01-prd-s-hd/index%2Em3u8",
+    "https://legaseriea-live-prd.cdn.netrw.it/out/v1/s-prd/ch-01-prd-s-v2/hls-ch-01-prd-s-hd/index.m3u8"
    ]
   }
  ]
